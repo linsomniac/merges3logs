@@ -23,7 +23,7 @@ dependencies = [
 ]
 
 [project.scripts]
-merges3logs = "merges3logs"
+merges3logs = "merges3logs:main"
 
 [project.optional-dependencies]
 test = ["pytest"]
