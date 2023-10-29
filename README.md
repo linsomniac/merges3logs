@@ -1,7 +1,6 @@
 # merges3logs
 
-A Python program to download cloudfront logs from S3 and merge them into
-a single log file for the day.
+Download cloudfront logs from S3 and merge them into a single log file for the day.
 
 ## Installation
 
