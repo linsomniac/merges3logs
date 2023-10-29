@@ -14,7 +14,7 @@ authors = [{ name = "Sean Reifschneider", email = "jafo00@gmail.com" }]
 requires-python = ">=3.8"
 classifiers = [
   "Development Status :: 4 - Beta",
-  "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+  "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
   "Natural Language :: English"
 ]
 dependencies = [
