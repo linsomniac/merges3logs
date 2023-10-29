@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "merges3logs"
-version = "0.1"
+version = "0.2"
 description = "Download cloudfront logs from S3 and merge them into a single log file for the day."
 keywords = ["aws", "s3", "logfile"]
 readme = "README.md"
