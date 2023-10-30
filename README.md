@@ -54,7 +54,7 @@ MaxWorkers = 10
 [Local]
 CacheDir = /path/to/mylogsbucketcache
 DestDir = /path/to/merged-logs
-DestFilename = webworkers-cloudfront-%%Y-%%m-%%d.gz
+DestFilename = webworkers-cloudfront-%%Y-%%m-%%d.log
 RemoveFiles = False
 ```
 
