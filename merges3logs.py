@@ -141,6 +141,7 @@ def main(config_file: str, date: Optional[str]) -> None:
     cache_dir = cfg.get("Local", "CacheDir")
     dest_dir = cfg.get("Local", "DestDir")
     dest_filename = cfg.get("Local", "DestFilename")
+    remove_files = bool(cfg.get("Local", "RemoveFiles", fallback="True"))
 
     # Setup S3 client
     s3 = boto3.client(
@@ -158,6 +159,7 @@ def main(config_file: str, date: Optional[str]) -> None:
     files_to_download = list_matching_files(
         s3, bucket_name, target_date.strftime(bucket_prefix)
     )
+    files_to_delete = files_to_download.copy() if remove_files else []
     files_to_download.extend(
         list_matching_files(s3, bucket_name, next_day.strftime(bucket_prefix))
     )
@@ -185,6 +187,10 @@ def main(config_file: str, date: Optional[str]) -> None:
 
     if retcode != 0:
         print(f"ERROR: sort/compress exited {retcode} != 0")
+
+    if remove_files:
+        for file in files_to_delete:
+            os.remove(os.path.join(cache_dir, os.path.basename(file)))
 
     sys.exit(retcode)
 

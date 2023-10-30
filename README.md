@@ -55,6 +55,7 @@ MaxWorkers = 10
 CacheDir = /path/to/mylogsbucketcache
 DestDir = /path/to/merged-logs
 DestFilename = webworkers-cloudfront-%%Y-%%m-%%d.gz
+RemoveFiles = False
 ```
 
 Details:
@@ -70,16 +71,21 @@ Details:
   this can be tens or hundreds of thousands of log files a day.  So running downloads
   in parallel can really speed it up.
 - Local.CacheDir is the path to a directory to store the downloaded log files.
-  This directory will need to have a cleanup job set up to prevent it from
-  blowing up.
+  This directory will need to have a cleanup job set up to prevent it from growing
+  unbounded.  See also "Local.RemoveFiles".
 - Local.DestDir is the directory that the merged log files will be written to.
 - Local.DestFilename is the name of the file that will be written in the DestDir
   with "strftime()" format to specify the date.
+- Local.RemoveFiles, if "True" will delete the days files from the cache directory
+  after a successful run.  If "False", they are kept and you will need to set up a
+  cron job or similar to delete them.  Probably most useful for testing, so
+  repeated downloads are unnecessary.  Default is "True".
 
 ## Cleanup
 
 merges3logs will download the log files into a cache directory, and then work from
-the files there.  You will need a cleanup job to prevent that from growing, for example:
+the files there.  You can use "Local.RemoveFiles" to delete them after the run, or
+set up a cron job for example:
 
 ```bash
 find /path/to/cachedir -type f -mtime +3 -exec rm {} +
