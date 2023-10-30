@@ -47,14 +47,23 @@ AccessKey = XXX
 SecretKey = XXX
 
 [S3]
+#  Bucket to download log files from
 BucketName = mylogsbucket
+#  The prefix of the logfiles to download.
+#  The "%" must be doubled, strftime format specifiers may be used
 Prefix = path/to/logfileprefix_log-%%Y-%%m-%%d-
+#  Number of parallel downloads to do
 MaxWorkers = 10
 
 [Local]
+#  Directory to write files downloaded from S3
 CacheDir = /path/to/mylogsbucketcache
+#  Directory to write merged logfiles to
 DestDir = /path/to/merged-logs
+#  .gz is added to this logfile name
+#  The "%" must be doubled, strftime format specifiers may be used
 DestFilename = webworkers-cloudfront-%%Y-%%m-%%d.log
+#  Remove the day's cached logfiles after a successful run?
 RemoveFiles = False
 ```
 
@@ -90,6 +99,9 @@ set up a cron job for example:
 ```bash
 find /path/to/cachedir -type f -mtime +3 -exec rm {} +
 ```
+
+It is probably worthwhile to set up cleaning of the cache anyway, as it can be
+large and may accumulate files if the program fails for any reason.
 
 You will also need to clean up the destination log directory, though it does grow
 much more slowly (logs are compressed and only one file per day).  Something like
