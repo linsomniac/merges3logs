@@ -1,6 +1,10 @@
 name: Release
 
-on: ["workflow_dispatch"]
+# Triggered from github UI
+#on: ["workflow_dispatch"]
+on:
+  release:
+    types: [released]
 
 jobs:
   build-and-publish:
