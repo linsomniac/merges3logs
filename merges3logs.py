@@ -14,6 +14,7 @@ import subprocess
 from typing import List, Any, Optional
 from concurrent.futures import ThreadPoolExecutor
 import sys
+import gzip
 
 
 def list_matching_files(s3: Any, bucket_name: str, prefix: str) -> List[str]:
@@ -175,12 +176,15 @@ def main(config_file: str, date: Optional[str]) -> None:
         text=True,
     )
 
-    date_prefix = f'[{target_date.strftime("%d/%b/%Y")}:'
+    date_prefix = f'[{target_date.strftime("%d/%b/%Y")}:'   #  Cloudfront
+    date_prefix2 = f'{target_date.strftime("%Y-%m-%d")}T'   #  ELB
     for file in [os.path.basename(x) for x in files_to_download]:
-        with open(os.path.join(cache_dir, file), "r") as f:
+        opener = gzip.open if file.endswith(".gz") else open
+        with opener(os.path.join(cache_dir, file), "rt", encoding="ascii") as f:
             for line in f:
                 fields = line.split()
-                if len(fields) > 2 and fields[2].startswith(date_prefix):
+                if len(fields) > 2 and (fields[2].startswith(date_prefix)
+                        or fields[1].startswith(date_prefix2)):
                     sort_proc.stdin.write(line)
     sort_proc.stdin.close()
     retcode = sort_proc.wait()
